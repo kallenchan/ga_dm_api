@@ -5,11 +5,14 @@ search(){
 }
 
 helpInfo(){
-    echo "AOE2 GA DM Lobby Finder"
+    echo "Welcome to the AOE2 GA DM Lobby Finder"
+    echo
+    
 }
 
 if [ "$1" = "search" ]; then
     search
+    echo "Search Results"
 else
     helpInfo
 fi

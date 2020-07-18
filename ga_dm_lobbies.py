@@ -6,20 +6,20 @@ ga_dm_players = ['JAbill',
                 'TROJN',
                 'huskserk']
 
-def get_lobbies():
+def get_lobbies_ga_dm():
     response=requests.get("https://aoe2.net/api/lobbies?game=aoe2hd&language=en")
     lobbies=pd.json_normalize(response.json())
-    ga_dm_lobbies=lobbies[['lobby_id','name','game_type','num_players','players','num_slots']][
+    lobbies_ga_dm=lobbies[['lobby_id','name','game_type','num_players','players','num_slots']][
         (lobbies.game_type==2) &
                               (lobbies.name.str.contains(r"\bis\b|\bGA\b",case=False)|
                                lobbies.name.str.contains(r"\bis\b|\bGADM\b",case=False)|
                                lobbies.name.str.contains(r"green",case=False)|
                                lobbies.name.str.contains(r"arabia",case=False)|
                               lobbies.name.str.contains("jabill",case=False))]
-    return ga_dm_lobbies
+    return lobbies_ga_dm
 
 
-lobbies_df=get_lobbies()
+lobbies_df=get_lobbies_ga_dm()
 for index,lobby in lobbies_df.iterrows():
     data=pd.DataFrame(lobby.players)
     print("              ")
@@ -30,6 +30,7 @@ for index,lobby in lobbies_df.iterrows():
     print("Players: {} / {}".format(lobby.num_players,lobby.num_slots))
     # filt =  pd.DataFrame(lobby.players)['name'].str.lower().isin(ga_dm_players)
     # print(pd.DataFrame(lobby.players)[['name','rating']][filt])
+    print((data.loc[0]['name']))
 
 print({"{} {} Found".format(len(lobbies_df),"Results")})
 
@@ -44,6 +45,6 @@ def join_game(lobby_ids):
         print("Invalid Game Number")
         join_game(lobby_ids)
 
-if (len(lobbies_df)>0):
-    join_game(lobby_ids)
+# if (len(lobbies_df)>0):
+#     join_game(lobby_ids)
 
